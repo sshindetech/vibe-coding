@@ -26,4 +26,10 @@ This project is a fullstack application for uploading Excel files with multiple 
 - **Frontend:** Expo, React Native, NativeWind, react-native-chart-kit
 - **Backend:** Nest.js, LangChain, Google Gemini, xlsx, multer
 
+## Screenshots
+Below screenshots are examples that shows the chat feature, dynamic graph and theme switching
+
+![Screen 1](./sample-data/screen_1.png)
+![Screen 2](./sample-data/screen_2.png)
+![Screen 3](./sample-data/screen_3.png)
 ---
