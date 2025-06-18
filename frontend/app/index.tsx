@@ -37,6 +37,14 @@ interface Message {
   chartData?: any;
 }
 
+const sampleMessages = [
+  'Show me a summary of the data',
+  'What are the top 5 categories?',
+  'Plot a trend of sales over time',
+  'Show the breakdown of unique products sold by month',
+  'Give me a breakdown by country',
+];
+
 export default function MainScreen() {
   const graphHeight = 100; // Default height for charts
   const [file, setFile] = useState<any>(null);
@@ -44,6 +52,7 @@ export default function MainScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [chartType, setChartType] = useState<'line' | 'bar' | 'pie' | 'doughnut'>('bar');
+  const [showSamples, setShowSamples] = useState(false);
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -149,7 +158,7 @@ export default function MainScreen() {
           {loading && <ActivityIndicator className="mt-2" />}
         </ScrollView>
       </View>
-      <View className="flex-row items-center px-4 py-3 bg-surface border-t border-gray-100">
+      <View className="flex-row items-center px-4 py-3 border-t border-gray-100" style={{ backgroundColor: 'var(--color-surface)', boxShadow: '0 -1px 2px 0 rgba(0,0,0,0.03)' }}>
         <TextInput
           className="flex-1 rounded-full border border-gray-300 px-4 py-3 mr-2 bg-white text-base"
           placeholder="Type your question..."
@@ -158,6 +167,13 @@ export default function MainScreen() {
           onSubmitEditing={handleSend}
           editable={!loading}
         />
+        <TouchableOpacity
+          onPress={() => setShowSamples((v) => !v)}
+          className="rounded-full bg-gray-200 p-3 mr-2"
+          accessibilityLabel="Show Sample Messages"
+        >
+          <MaterialIcons name="chat-bubble-outline" size={24} color="#555" />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={handleFilePick}
           className="rounded-full bg-gray-200 p-3 mr-2"
@@ -168,13 +184,27 @@ export default function MainScreen() {
         <TouchableOpacity
           className="rounded-full bg-primary px-5 py-3"
           onPress={handleSend}
-          disabled={
-            loading || !input.trim() || !file
-          }
+          disabled={loading || !input.trim() || !file}
           style={{ opacity: loading || !input.trim() || !file ? 0.5 : 1 }}
         >
           <Text className="text-white font-semibold">Send</Text>
         </TouchableOpacity>
+        {showSamples && (
+          <View style={{ position: 'absolute', bottom: 60, right: 90, zIndex: 50 }} className="bg-white border border-gray-200 rounded-xl shadow-lg p-2 w-64">
+            {sampleMessages.map((msg, idx) => (
+              <TouchableOpacity
+                key={idx}
+                className="py-2 px-3 hover:bg-gray-100 rounded"
+                onPress={() => {
+                  setInput(msg);
+                  setShowSamples(false);
+                }}
+              >
+                <Text className="text-gray-800 text-sm">{msg}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
