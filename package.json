@@ -1,0 +1,14 @@
+{
+  "name": "vibe-coding",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "backend": "npm run start --workspace backend",
+    "frontend": "npm run start --workspace frontend"
+}
+
+}
