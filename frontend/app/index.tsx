@@ -16,6 +16,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Bar, Doughnut, Line, Pie } from 'react-chartjs-2';
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import '../global-themes.css';
+import { ChatMessage } from '../components/ChatMessage';
+import { ChartBlock } from '../components/ChartBlock';
 
 ChartJS.register(
   CategoryScale,
@@ -105,19 +107,19 @@ export default function MainScreen() {
 
   return (
     <View className="w-full mt-2 min-h-[700px] rounded-md mx-auto bg-background border border-gray-200 overflow-hidden flex-1">
-      <View className="flex  px-4 py-3 bg-gray-200 border-b border-gray-100">
+      <View className="flex  px-4 py-3 bg-secondary  border-b border-gray-100">
         <View className='flex-row items-center justify-between'>
-<Text className="text-lg font-bold text-primary">Chat Assistant</Text>
-        {file && (
-          <View className="flex-row items-center ml-4">
-            <MaterialIcons name="attach-file" size={20} color="#555" />
-            <Text className="ml-1 text-sm text-gray-700 max-w-[160px] truncate">{file.name || file.uri || 'Selected File'}</Text>
-          </View>
-        )}          
+            <Text className="text-lg font-bold text-white">Chat Assistant</Text>
+          {file && (
+            <View className="flex-row items-center ml-4">
+              <MaterialIcons name="attach-file" size={20} color="#fff" />
+              <Text className="ml-1 text-sm text-white max-w-[500px] truncate">Uploaded File: {file.name || file.uri || 'Selected File'}</Text>
+            </View>
+          )}          
         </View>
       {/* Chart type selector */}
       <View className="flex-row items-center space-x-2">
-        <Text className="text-sm font-semibold text-gray-700 mr-2">Chart Type:</Text>
+        <Text className="text-sm font-semibold text-white mr-2">Chart Type:</Text>
         <TouchableOpacity onPress={() => setChartType('line')} className={`px-3 py-1 rounded ${chartType === 'line' ? 'bg-primary' : 'bg-gray-200'}`}><Text className={chartType === 'line' ? 'text-white' : 'text-gray-700'}>Line</Text></TouchableOpacity>
         <TouchableOpacity onPress={() => setChartType('bar')} className={`px-3 py-1 rounded ${chartType === 'bar' ? 'bg-primary' : 'bg-gray-200'}`}><Text className={chartType === 'bar' ? 'text-white' : 'text-gray-700'}>Bar</Text></TouchableOpacity>
         <TouchableOpacity onPress={() => setChartType('pie')} className={`px-3 py-1 rounded ${chartType === 'pie' ? 'bg-primary' : 'bg-gray-200'}`}><Text className={chartType === 'pie' ? 'text-white' : 'text-gray-700'}>Pie</Text></TouchableOpacity>
@@ -133,109 +135,16 @@ export default function MainScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {messages.map((msg, idx) => (
-            <View key={idx} className={`w-full flex ${msg.type === 'user' ? 'items-end' : 'items-start'}`}>
-              <View className={`rounded-xl px-4 m-2 py-2 max-w-[80%] ${msg.type === 'user' ? 'bg-primary self-end' : 'bg-gray-200 self-start'} ${msg.type === 'user' ? 'mr-2' : 'ml-2'}`}
-                style={{ marginBottom: 2, backgroundColor: msg.type === 'user' ? 'var(--color-primary)' : 'var(--color-surface)' }}
-              >
-                <Text style={{ color: msg.type === 'user' ? '#fff' : 'var(--color-text)' }}>{msg.text}</Text>
-              </View>
+            <ChatMessage key={idx} text={msg.text} type={msg.type}>
               {msg.chartData && (
-                <View className="w-full bg-white rounded-xl mt-2 p-2 border border-gray-200">
-                  {(() => {
-                    const themeColors = getThemeColors();
-                    return (
-                      <>
-                        {chartType === 'line' && (
-                          <Line
-                            data={{
-                              labels: msg.chartData.labels,
-                              datasets: msg.chartData.datasets.map((ds: any, i: number) => ({
-                                ...ds,
-                                borderColor: ds.borderColor || (i === 0 ? themeColors.primary : i === 1 ? themeColors.secondary : themeColors.accent),
-                                backgroundColor: ds.backgroundColor || (i === 0 ? themeColors.primary + '33' : i === 1 ? themeColors.secondary + '33' : themeColors.accent + '33'),
-                                pointBackgroundColor: ds.pointBackgroundColor || (i === 0 ? themeColors.primary : i === 1 ? themeColors.secondary : themeColors.accent),
-                              })),
-                            }}
-                            options={{
-                              responsive: true,
-                              plugins: {
-                                legend: { display: true, position: 'top' },
-                                title: { display: true, text: msg.chartData.datasets[0]?.label || 'Chart' },
-                              },
-                            }}
-                            height={graphHeight}
-                          />
-                        )}
-                        {chartType === 'bar' && (
-                          <Bar
-                            data={{
-                              labels: msg.chartData.labels,
-                              datasets: msg.chartData.datasets.map((ds: any, i: number) => ({
-                                ...ds,
-                                backgroundColor: ds.backgroundColor || (i === 0 ? themeColors.primary : i === 1 ? themeColors.secondary : themeColors.accent),
-                                borderColor: ds.borderColor || (i === 0 ? themeColors.primary : i === 1 ? themeColors.secondary : themeColors.accent),
-                              })),
-                            }}
-                            options={{
-                              responsive: true,
-                              plugins: {
-                                legend: { display: true, position: 'top' },
-                                title: { display: true, text: msg.chartData.datasets[0]?.label || 'Chart' },
-                              },
-                            }}
-                            height={graphHeight}
-                          />
-                        )}
-                        {chartType === 'pie' && (
-                          <div style={{ width: '100%', height: graphHeight * 4 }}>
-                            <Pie
-                              data={{
-                                labels: msg.chartData.labels,
-                                datasets: msg.chartData.datasets.map((ds: any) => ({
-                                  ...ds,
-                                  backgroundColor: ds.backgroundColor || [themeColors.primary, themeColors.secondary, themeColors.accent, themeColors.danger],
-                                  borderColor: ds.borderColor || [themeColors.primary, themeColors.secondary, themeColors.accent, themeColors.danger],
-                                })),
-                              }}
-                              options={{
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                  legend: { display: true, position: 'top' },
-                                  title: { display: true, text: msg.chartData.datasets[0]?.label || 'Chart' },
-                                },
-                              }}
-                            />
-                          </div>
-                        )}
-                        {chartType === 'doughnut' && (
-                          <div style={{ width: '100%', height: graphHeight * 4 }}>
-                            <Doughnut
-                              data={{
-                                labels: msg.chartData.labels,
-                                datasets: msg.chartData.datasets.map((ds: any) => ({
-                                  ...ds,
-                                  backgroundColor: ds.backgroundColor || [themeColors.primary, themeColors.secondary, themeColors.accent, themeColors.danger],
-                                  borderColor: ds.borderColor || [themeColors.primary, themeColors.secondary, themeColors.accent, themeColors.danger],
-                                })),
-                              }}
-                              options={{
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                  legend: { display: true, position: 'top' },
-                                  title: { display: true, text: msg.chartData.datasets[0]?.label || 'Chart' },
-                                },
-                              }}
-                            />
-                          </div>
-                        )}
-                      </>
-                    );
-                  })()}
-                </View>
+                <ChartBlock
+                  chartType={chartType}
+                  chartData={msg.chartData}
+                  graphHeight={graphHeight}
+                  themeColors={getThemeColors()}
+                />
               )}
-            </View>
+            </ChatMessage>
           ))}
           {loading && <ActivityIndicator className="mt-2" />}
         </ScrollView>

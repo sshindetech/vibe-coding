@@ -1,21 +1,21 @@
 :root {
-  --color-primary: #0a6ad2; /* Cognizant blue */
-  --color-secondary: #34A853;
-  --color-accent: #FBBC05;
-  --color-danger: #EA4335;
-  --color-background: #ffffff;
-  --color-surface: #f8fafc;
-  --color-text: #1f2937;
+    --color-primary: #1a237e;    /* Navy blue */
+    --color-secondary: #283593;  /* Deep navy */
+    --color-accent: #536dfe;     /* Accent blue */
+    --color-danger: #ff5252;     /* Alert red */
+    --color-background: #e3eafc; /* Light navy background */
+    --color-surface: #c5cae9;    /* Surface navy */
+    --color-text: #0d1333;       /* Dark navy text */
 }
 
 .theme-dark {
   --color-primary: #6366f1;
-  --color-secondary: #06b6d4;
+--color-secondary: #4f46e5;
   --color-accent: #f472b6;
   --color-danger: #ef4444;
   --color-background: #18181b;
-  --color-surface: #27272a;
-  --color-text: #f4f4f5;
+--color-surface: #818cf8;
+--color-text: #c7d2fe;
 }
 
 .theme-green {
