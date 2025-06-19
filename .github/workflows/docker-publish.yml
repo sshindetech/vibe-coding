@@ -14,12 +14,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       IMAGE_NAME_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-backend
       IMAGE_NAME_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-frontend
-
     steps:
-      - name: Echo DockerHub credentials
-        run: |
-          echo "DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}"
-          echo "DOCKERHUB_TOKEN=${DOCKERHUB_TOKEN:0:4}****"    
       - name: Checkout code
         uses: actions/checkout@v4
 
