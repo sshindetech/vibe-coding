@@ -16,7 +16,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ChartBlock } from '../components/ChartBlock';
 import { ChatMessage } from '../components/ChatMessage';
-import '../global-themes.css';
 
 ChartJS.register(
   CategoryScale,
@@ -61,6 +60,18 @@ export default function MainScreen() {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
   }, [messages, loading]);
+
+  // On mount, fetch uploaded files from backend
+  useEffect(() => {
+    fetch('http://localhost:3000/list-files', {
+      method: 'POST',
+    })
+      .then((res) => res.json())
+      .then((files) => {
+        setUploadedFiles(files);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleFilePick = async () => {
     const result = await DocumentPicker.getDocumentAsync({ type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -118,6 +129,38 @@ export default function MainScreen() {
     setLoading(false);
   };
 
+  // Helper to refresh uploaded files from backend
+  const refreshUploadedFiles = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/list-files', { method: 'POST' });
+      const files = await res.json();
+      setUploadedFiles(files);
+    } catch {}
+  };
+
+  // Delete file handler
+  const handleDeleteFile = async (filename: string) => {
+    setLoading(true);
+    try {
+      await fetch('http://localhost:3000/delete-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename }),
+      });
+      await refreshUploadedFiles();
+      setMessages((prev) => [
+        ...prev,
+        { type: 'bot', text: `Embeddings for file '${filename}' deleted.` },
+      ]);
+    } catch (e) {
+      setMessages((prev) => [
+        ...prev,
+        { type: 'bot', text: `Error deleting embeddings for file '${filename}'.` },
+      ]);
+    }
+    setLoading(false);
+  };
+
   // Helper to get current theme colors from CSS variables
   function getThemeColors() {
     if (typeof window === 'undefined') return {
@@ -147,7 +190,15 @@ export default function MainScreen() {
           {uploadedFiles.map((f, idx) => (
             <View key={idx} className="flex-row items-center mb-2">
               <MaterialIcons name="attach-file" size={18} color="#fff" />
-              <Text className="ml-2 text-sm text-white truncate max-w-[180px]">{f.name || f.uri || 'File'}</Text>
+              <Text className="ml-2 text-sm text-white truncate text-wrap">{f.name || f.uri || f.filename || 'File'}</Text>
+              <TouchableOpacity
+                onPress={() => handleDeleteFile(f.name || f.uri || f.filename)}
+                className="ml-2 p-1 rounded hover:bg-danger"
+                accessibilityLabel={`Delete ${f.name || f.uri}`}
+                disabled={loading}
+              >
+                <MaterialIcons name="delete" size={18} color="#fff" />
+              </TouchableOpacity>
             </View>
           ))}
         </View>
@@ -219,8 +270,8 @@ export default function MainScreen() {
           <TouchableOpacity
             className="rounded-full bg-primary px-5 py-3"
             onPress={handleSend}
-            disabled={loading || !input.trim() || !file}
-            style={{ opacity: loading || !input.trim() || !file ? 0.5 : 1 }}
+            disabled={loading || !input.trim() || uploadedFiles.length === 0}
+            style={{ opacity: loading || !input.trim() || uploadedFiles.length === 0 ? 0.5 : 1 }}
           >
             <Text className="text-white font-semibold">Send</Text>
           </TouchableOpacity>

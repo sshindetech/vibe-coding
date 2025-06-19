@@ -3,10 +3,17 @@ import { Injectable } from '@nestjs/common';
 import * as XLSX from 'xlsx';
 import { z } from 'zod';
 import { LangChainService } from './langchain.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UploadedFile } from './uploaded-file.entity';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly langChainService: LangChainService) {}
+  constructor(
+    private readonly langChainService: LangChainService,
+    @InjectRepository(UploadedFile)
+    private readonly uploadedFileRepo: Repository<UploadedFile>,
+  ) {}
 
   /**
    * Process the uploaded Excel file and store its data in the vector store.
@@ -17,8 +24,31 @@ export class AppService {
     workbook.SheetNames.forEach((sheetName) => {
       sheetsData[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
     });
-    await this.langChainService.createEmbeddingAndUpdateVectorStore(JSON.stringify(sheetsData));
+    const filename = file.originalname || file.name || 'unknown.xlsx';
+    await this.langChainService.createEmbeddingAndUpdateVectorStore(
+      JSON.stringify(sheetsData),
+      filename
+    );
+    // Save file info to DB if not already present
+    let uploaded = await this.uploadedFileRepo.findOne({ where: { filename } });
+    if (!uploaded) {
+      uploaded = this.uploadedFileRepo.create({ filename, originalname: file.originalname });
+      await this.uploadedFileRepo.save(uploaded);
+    }
     return { message: 'File processed and stored in vector store.' };
+  }
+
+  async listUploadedFiles() {
+    return this.uploadedFileRepo.find({ order: { uploadedAt: 'DESC' } });
+  }
+
+  /**
+   * Delete all embeddings for a given filename from the vector store and remove the DB record.
+   */
+  async deleteFileEmbeddings(filename: string) {
+    await this.langChainService.deleteEmbeddingsByFilename(filename);
+    await this.uploadedFileRepo.delete({ filename });
+    return { message: `Embeddings and DB record for file '${filename}' deleted.` };
   }
 
   /**

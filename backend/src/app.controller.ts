@@ -51,4 +51,27 @@ export class AppController {
     return await this.appService.queryExcel(query);
     // return { summary: 'Query processed (implement logic)', chartData: null };
   }
+
+  @Post('delete-file')
+  @ApiOperation({ summary: 'Delete all embeddings for a specific file' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        filename: { type: 'string' },
+      },
+      required: ['filename'],
+    },
+  })
+  @ApiResponse({ status: 200, description: 'File embeddings deleted.' })
+  async deleteFile(@Body('filename') filename: string) {
+    return await this.appService.deleteFileEmbeddings(filename);
+  }
+
+  @Post('list-files')
+  @ApiOperation({ summary: 'List all uploaded files' })
+  @ApiResponse({ status: 200, description: 'List of uploaded files.' })
+  async listFiles() {
+    return await this.appService.listUploadedFiles();
+  }
 }

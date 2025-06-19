@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom theme and color configuration can be added below */
 :root {
     --color-primary: #1a237e;    /* Navy blue */
     --color-secondary: #283593;  /* Deep navy */

@@ -12,6 +12,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers';
 export class LangChainService {
     private vectorStore: MemoryVectorStore;
     private embeddings: GoogleGenerativeAIEmbeddings;
+    private allDocuments: Document[] = [];
     /**
     * Initialize the LangChain service with a memory vector store and Google Generative AI embeddings.
     */
@@ -27,20 +28,28 @@ export class LangChainService {
     
     /**
     * Process an Excel file buffer, extract text, create embeddings, and store in vector store.
+    * @param excelJson The JSON string of the Excel file contents
+    * @param filename The name of the uploaded file
     */
-    async createEmbeddingAndUpdateVectorStore(excelJson: string) { //buffer: Buffer
-        // Parse Excel file
-        // const workbook = XLSX.read(buffer, { type: 'buffer' });
-        // let allText = '';
-        // workbook.SheetNames.forEach((sheetName) => {
-        //   const sheet = workbook.Sheets[sheetName];
-        //   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        //   allText += json.map((row: any[]) => row.join(' ')).join('\n');
-        // });
-        // Create embedding and add to vector store
-        await this.vectorStore.addDocuments([{ pageContent: excelJson, metadata: {} }]);
+    async createEmbeddingAndUpdateVectorStore(excelJson: string, filename: string) {
+        const doc = { pageContent: excelJson, metadata: { filename } };
+        this.allDocuments.push(doc);
+        await this.vectorStore.addDocuments([doc]);
     }
-    
+
+    /**
+    * Delete all documents from the vector store for a given filename.
+    * @param filename The name of the file whose embeddings should be deleted
+    */
+    async deleteEmbeddingsByFilename(filename: string) {
+        this.allDocuments = this.allDocuments.filter(doc => doc.metadata?.filename !== filename);
+        // Re-initialize the vector store and re-add remaining documents
+        this.vectorStore = new MemoryVectorStore(this.embeddings);
+        if (this.allDocuments.length > 0) {
+            await this.vectorStore.addDocuments(this.allDocuments);
+        }
+    }
+
     /**
     * Get the underlying vector store instance.
     */

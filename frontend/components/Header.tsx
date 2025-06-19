@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import '../global-themes.css';
 
 const themes = [
   { key: '', label: 'Default' },
