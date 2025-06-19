@@ -1,12 +1,11 @@
 # Dockerfile for Expo React Native Frontend (Web build)
 FROM node:20-alpine
 
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install --production
+WORKDIR /
 
 COPY . .
+
+RUN npm install --production
 
 # Build the static web app
 RUN npx expo export -p web
