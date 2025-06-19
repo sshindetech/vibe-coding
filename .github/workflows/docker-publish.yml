@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Echo DockerHub credentials
         run: |
-          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_TOKEN }}"
+          echo "DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}"
           echo "DOCKERHUB_TOKEN=${DOCKERHUB_TOKEN:0:4}****"    
       - name: Checkout code
         uses: actions/checkout@v4
