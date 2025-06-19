@@ -13,11 +13,10 @@ import {
 } from 'chart.js';
 import * as DocumentPicker from 'expo-document-picker';
 import React, { useEffect, useRef, useState } from 'react';
-import { Bar, Doughnut, Line, Pie } from 'react-chartjs-2';
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import '../global-themes.css';
-import { ChatMessage } from '../components/ChatMessage';
 import { ChartBlock } from '../components/ChartBlock';
+import { ChatMessage } from '../components/ChatMessage';
+import '../global-themes.css';
 
 ChartJS.register(
   CategoryScale,
@@ -160,6 +159,7 @@ export default function MainScreen() {
       </View>
       <View className="flex-row items-center px-4 py-3 border-t border-gray-100" style={{ backgroundColor: 'var(--color-surface)', boxShadow: '0 -1px 2px 0 rgba(0,0,0,0.03)' }}>
         <TextInput
+          id='input-text'
           className="flex-1 rounded-full border border-gray-300 px-4 py-3 mr-2 bg-white text-base"
           placeholder="Type your question..."
           value={input}
@@ -178,6 +178,7 @@ export default function MainScreen() {
           onPress={handleFilePick}
           className="rounded-full bg-gray-200 p-3 mr-2"
           accessibilityLabel="Upload File"
+          id='upload-file-button'
         >
           <MaterialIcons name="attach-file" size={24} color="#555" />
         </TouchableOpacity>
