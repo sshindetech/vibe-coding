@@ -1,13 +1,12 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { Slot } from 'expo-router';
+import Head from 'expo-router/head';
 import 'react-native-reanimated';
-import "../global.css"
+import "../global.css";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Text, View } from 'react-native';
 import Header from '@/components/Header';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { View } from 'react-native';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -21,11 +20,16 @@ export default function RootLayout() {
   }
 
   return (
-      <View >
-        <Header />
-        <View className='container mx-auto'>
-          <Slot />
+      <>
+        <Head>
+          <title>GenAI Data Analyst</title>
+        </Head>
+        <View>
+          <Header />
+          <View className='container mx-auto'>
+            <Slot />
+          </View>
         </View>
-      </View>    
+      </>
   );
 }
