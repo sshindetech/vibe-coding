@@ -14,6 +14,7 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       IMAGE_NAME_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-backend
       IMAGE_NAME_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-frontend
+      EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,16 +28,16 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      # - name: Build and push backend image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./backend
-      #     file: ./backend/Dockerfile
-      #     push: true
-      #     tags: ${{ env.IMAGE_NAME_BACKEND }}:latest
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_BACKEND }}:latest
 
       - name: Create .env file for frontend
-        run: echo "EXPO_PUBLIC_API_URL=http://localhost:3000" > frontend/.env
+        run: echo "EXPO_PUBLIC_API_URL=${{ env.EXPO_PUBLIC_API_URL }}" > frontend/.env
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
