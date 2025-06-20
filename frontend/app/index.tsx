@@ -29,6 +29,9 @@ ChartJS.register(
   Legend
 );
 
+// Pick up API URL from Expo config
+const API_URL = process.env.EXPO_PUBLIC_API_URL || process.env.API_URL || (globalThis as any).API_URL || (typeof window !== 'undefined' && (window as any).API_URL) || (typeof process !== 'undefined' && process.env.API_URL) || '';
+
 interface Message {
   type: 'user' | 'bot';
   text: string;
@@ -63,7 +66,8 @@ export default function MainScreen() {
 
   // On mount, fetch uploaded files from backend
   useEffect(() => {
-    fetch('http://localhost:3000/list-files', {
+    alert(`Using API URL: ${API_URL}`);
+    fetch(`${API_URL}/list-files`, {
       method: 'POST',
     })
       .then((res) => res.json())
@@ -86,7 +90,7 @@ export default function MainScreen() {
       }
       setLoading(true);
       try {
-        await fetch('http://localhost:3000/upload', {
+        await fetch(`${API_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -109,7 +113,7 @@ export default function MainScreen() {
     setMessages((prev) => [...prev, { type: 'user', text: input }]);
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/query', {
+      const response = await fetch(`${API_URL}/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
         body: JSON.stringify({ query: input }),
@@ -132,7 +136,7 @@ export default function MainScreen() {
   // Helper to refresh uploaded files from backend
   const refreshUploadedFiles = async () => {
     try {
-      const res = await fetch('http://localhost:3000/list-files', { method: 'POST' });
+      const res = await fetch(`${API_URL}/list-files`, { method: 'POST' });
       const files = await res.json();
       setUploadedFiles(files);
     } catch {}
@@ -142,7 +146,7 @@ export default function MainScreen() {
   const handleDeleteFile = async (filename: string) => {
     setLoading(true);
     try {
-      await fetch('http://localhost:3000/delete-file', {
+      await fetch(`${API_URL}/delete-file`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filename }),
