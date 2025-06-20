@@ -35,9 +35,8 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_NAME_BACKEND }}:latest
 
-      # Create .env file for frontend with EXPO_PUBLIC_API_URL from GitHub Actions env
-      - name: Create .env for frontend
-        run: echo "EXPO_PUBLIC_API_URL=${{ env.EXPO_PUBLIC_API_URL }}" > ./frontend/.env
+      - name: Create .env file for frontend
+        run: echo "EXPO_PUBLIC_API_URL=${{ env.EXPO_PUBLIC_API_URL }}" > frontend/.env
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5

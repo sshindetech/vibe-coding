@@ -66,7 +66,6 @@ export default function MainScreen() {
 
   // On mount, fetch uploaded files from backend
   useEffect(() => {
-    alert(`Using API URL: ${API_URL}`);
     fetch(`${API_URL}/list-files`, {
       method: 'POST',
     })
