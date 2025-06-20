@@ -1,4 +1,5 @@
 # Vibe Coding Example: Financial Data Q&A App
+This application enables users to upload Excel files containing financial data and ask questions in natural language to analyze and visualize the data. Built using the Vibe Coding approach, it combines a modern Expo React Native frontend for seamless user interaction with a robust Nest.js backend. The backend leverages LangChain with Google Gemini for advanced language understanding and xlsx for Excel parsing, allowing users to gain insights and generate charts from their data with minimal effort.
 
 ## Overview
 This project is a fullstack application for uploading Excel files with multiple tabs and querying financial data using natural language. It features:
