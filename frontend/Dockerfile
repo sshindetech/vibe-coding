@@ -12,6 +12,6 @@ RUN npx expo export -p web
 
 # Use nginx to serve the static files
 FROM nginx:alpine
-COPY --from=0 /app/dist/web /usr/share/nginx/html
+COPY --from=0 /dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
