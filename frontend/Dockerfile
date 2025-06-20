@@ -5,7 +5,7 @@ WORKDIR /
 
 COPY . .
 
-RUN npm install --production
+RUN npm install
 
 # Build the static web app
 RUN npx expo export -p web
