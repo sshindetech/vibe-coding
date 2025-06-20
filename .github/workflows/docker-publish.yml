@@ -27,13 +27,13 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and push backend image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: true
-          tags: ${{ env.IMAGE_NAME_BACKEND }}:latest
+      # - name: Build and push backend image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./backend
+      #     file: ./backend/Dockerfile
+      #     push: true
+      #     tags: ${{ env.IMAGE_NAME_BACKEND }}:latest
 
       - name: Create .env file for frontend
         run: echo "EXPO_PUBLIC_API_URL=http://localhost:3000" > frontend/.env
