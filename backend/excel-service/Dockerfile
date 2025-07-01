@@ -1,8 +1,8 @@
 # Dockerfile for Excel Service
 FROM node:20-alpine
 WORKDIR /app
-COPY excel-service/package*.json ./
-COPY excel-service ./
+COPY backend/excel-service/package*.json ./
+COPY backend/excel-service ./
 RUN npm install --legacy-peer-deps --omit=dev
 RUN npm run build
 EXPOSE 4001
