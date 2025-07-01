@@ -4,7 +4,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  const port = process.env.GATEWAY_PORT ? Number(process.env.GATEWAY_PORT) : 3000;
+  console.log(`Gateway running on port: ${port}`);
+  
   // Enable CORS for all origins (customize as needed)
   app.enableCors();
 
@@ -16,6 +18,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.GATEWAY_PORT ?? 3000);
+  await app.listen(port);
 }
 bootstrap();
