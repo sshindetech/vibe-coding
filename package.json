@@ -4,11 +4,23 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend/gateway",
+    "backend/ai-service",
+    "backend/excel-service"
   ],
   "scripts": {
-    "backend": "npm run start --workspace backend",
-    "frontend": "npm run start --workspace frontend"
-}
-
+    "frontend": "npm run start --workspace frontend",
+    "gateway": "npm run start --workspace backend/gateway",
+    "gateway:dev": "npm run start:dev --workspace backend/gateway",
+    "ai-service": "npm run start --workspace backend/ai-service",
+    "ai-service:dev": "npm run start:dev --workspace backend/ai-service",
+    "excel-service": "npm run start --workspace backend/excel-service",
+    "excel-service:dev": "npm run start:dev --workspace backend/excel-service"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.13"
+  }
 }

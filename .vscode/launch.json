@@ -1,10 +1,11 @@
 {
   "version": "0.2.0",
   "configurations": [
+    // Gateway
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug NestJS Backend",
+      "name": "Debug Monolithic",
       "program": "${workspaceFolder}/node_modules/.bin/nest",
       "args": [
         "start",
@@ -16,6 +17,66 @@
       "envFile": "${workspaceFolder}/backend/.env",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },    
+    // Gateway
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Gateway",
+      "program": "${workspaceFolder}/node_modules/.bin/nest",
+      "args": [
+        "start",
+        "--watch"
+      ],
+      "cwd": "${workspaceFolder}/backend/gateway",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "envFile": "${workspaceFolder}/backend/gateway/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    // Microservice 1
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Excel Microservice",
+      "program": "${workspaceFolder}/node_modules/.bin/nest",
+      "args": [
+        "start",
+        "--watch"
+      ],
+      "cwd": "${workspaceFolder}/backend/excel-service",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "envFile": "${workspaceFolder}/backend/excel-service/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    // Microservice 2
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug AI Microservice",
+      "program": "${workspaceFolder}/node_modules/.bin/nest",
+      "args": [
+        "start",
+        "--watch"
+      ],
+      "cwd": "${workspaceFolder}/backend/ai-service",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "envFile": "${workspaceFolder}/backend/ai-service/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    // Add more microservices as needed...
+
+    // Expo React Native Frontend
+    {
+      "type": "expo",
+      "request": "launch",
+      "name": "Debug Expo Frontend",
+      "cwd": "${workspaceFolder}/frontend"
     }
   ]
 }
