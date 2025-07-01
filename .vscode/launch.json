@@ -1,23 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
-    // Gateway
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Monolithic",
-      "program": "${workspaceFolder}/node_modules/.bin/nest",
-      "args": [
-        "start",
-        "--watch"
-      ],
-      "cwd": "${workspaceFolder}/backend",
-      "autoAttachChildProcesses": true,
-      "restart": true,
-      "envFile": "${workspaceFolder}/backend/.env",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },    
+   
     // Gateway
     {
       "type": "node",
@@ -70,6 +54,23 @@
       "internalConsoleOptions": "neverOpen"
     },
     // Add more microservices as needed...
+    // Monolithic Application
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Monolithic",
+      "program": "${workspaceFolder}/node_modules/.bin/nest",
+      "args": [
+        "start",
+        "--watch"
+      ],
+      "cwd": "${workspaceFolder}/backend",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "envFile": "${workspaceFolder}/backend/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }, 
 
     // Expo React Native Frontend
     {
