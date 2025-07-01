@@ -6,7 +6,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.GATEWAY_PORT ? Number(process.env.GATEWAY_PORT) : 3000;
   console.log(`Gateway running on port: ${port}`);
-  
+  console.log(`Gateway: Excel Service Host: ${process.env.EXCEL_SERVICE_HOST}`);
+  console.log(`Gateway: AI Service Host: ${process.env.AI_SERVICE_HOST}`);
+
   // Enable CORS for all origins (customize as needed)
   app.enableCors();
 
