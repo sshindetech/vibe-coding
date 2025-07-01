@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
+console.log(`Excel Service Host: ${process.env.EXCEL_SERVICE_HOST}`);
+console.log(`AI Service Host: ${process.env.AI_SERVICE_HOST}`);
+
 @Module({
   imports: [
     ClientsModule.register([
