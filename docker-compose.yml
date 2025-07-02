@@ -1,19 +1,60 @@
 version: '3.8'
 services:
-  backend:
-    image: sshindetech/vibe-backend:latest
+
+  ai-service:
+    image: sshindetech/vibe-ai-service:latest
     pull_policy: always
-    container_name: vibe-backend
+    container_name: vibe-ai-service
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${AI_SERVICE_PORT}:${AI_SERVICE_PORT}"
     environment:
       - NODE_ENV=production
+      - AI_SERVICE_HOST=${AI_SERVICE_HOST}
+      - AI_SERVICE_PORT=${AI_SERVICE_PORT}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - MODEL_ID=${MODEL_ID}
+      - MODEL_ID=${MODEL_ID}      
+    networks:
+      - vibe-net
+
+  excel-service:
+    image: sshindetech/vibe-excel-service:latest
+    pull_policy: always
+    container_name: vibe-excel-service
+    restart: unless-stopped
+    ports:
+      - "${EXCEL_SERVICE_PORT}:${EXCEL_SERVICE_PORT}"
+    environment:
+      - NODE_ENV=production
+      - EXCEL_SERVICE_HOST=${EXCEL_SERVICE_HOST}
+      - EXCEL_SERVICE_PORT=${EXCEL_SERVICE_PORT}
+      - CLIENT_AI_SERVICE_HOST=${CLIENT_AI_SERVICE_HOST}
+      - CLIENT_AI_SERVICE_PORT=${CLIENT_AI_SERVICE_PORT}      
+    networks:
+      - vibe-net
+
+  gateway:
+    image: sshindetech/vibe-gateway:latest
+    pull_policy: always
+    container_name: vibe-gateway
+    restart: unless-stopped
+    ports:
+      - "${GATEWAY_PORT}:${GATEWAY_PORT}"
+    environment:
+      - NODE_ENV=production
+      - GATEWAY_PORT=${GATEWAY_PORT}
+      - CLIENT_AI_SERVICE_HOST=${CLIENT_AI_SERVICE_HOST}
+      - CLIENT_AI_SERVICE_PORT=${CLIENT_AI_SERVICE_PORT}   
+      - CLIENT_EXCEL_SERVICE_HOST=${CLIENT_EXCEL_SERVICE_HOST}
+      - CLIENT_EXCEL_SERVICE_PORT=${CLIENT_EXCEL_SERVICE_PORT}         
+    depends_on:
+      - ai-service
+      - excel-service
     volumes:
       - ./backend/database:/app/database
-
+    networks:
+      - vibe-net
+      
   frontend:
     image: sshindetech/vibe-frontend:latest
     pull_policy: always
@@ -23,3 +64,11 @@ services:
       - "8080:80"
     environment:
       - NODE_ENV=production
+    depends_on:
+      - gateway
+    networks:
+      - vibe-net
+
+networks:
+  vibe-net:
+    driver: bridge
