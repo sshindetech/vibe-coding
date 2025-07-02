@@ -18,11 +18,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     TypeOrmModule.forFeature([UploadedFile]),
     ClientsModule.register([
       {
-        name: 'AI_SERVICE',
+        name: 'CLIENT_AI_SERVICE',
         transport: Transport.TCP,
         options: { 
-          host: process.env.AI_SERVICE_HOST, 
-          port: process.env.AI_SERVICE_PORT ? Number(process.env.AI_SERVICE_PORT) : undefined 
+          host: process.env.CLIENT_AI_SERVICE_HOST || 'localhost', 
+          port: process.env.CLIENT_AI_SERVICE_PORT ? Number(process.env.CLIENT_AI_SERVICE_PORT) : undefined 
         },
       },
     ]),    

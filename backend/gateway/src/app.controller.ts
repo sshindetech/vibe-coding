@@ -7,8 +7,8 @@ import { AnalyzeResponseDto } from './analyze-response.dto';
 @Controller()
 export class AppController {
   constructor(
-    @Inject('EXCEL_SERVICE') private readonly excelService: ClientProxy,
-    @Inject('AI_SERVICE') private readonly aiService: ClientProxy,
+    @Inject('CLIENT_EXCEL_SERVICE') private readonly excelService: ClientProxy,
+    @Inject('CLIENT_AI_SERVICE') private readonly aiService: ClientProxy,
   ) {}
   
   @Get('health')

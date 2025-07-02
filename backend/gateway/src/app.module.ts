@@ -6,19 +6,19 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     ClientsModule.register([
       {
-        name: 'EXCEL_SERVICE',
+        name: 'CLIENT_EXCEL_SERVICE',
         transport: Transport.TCP,
         options: { 
-          host: process.env.EXCEL_SERVICE_HOST, 
-          port: process.env.EXCEL_SERVICE_PORT ? Number(process.env.EXCEL_SERVICE_PORT) : undefined 
+          host: process.env.CLIENT_EXCEL_SERVICE_HOST, 
+          port: process.env.CLIENT_EXCEL_SERVICE_PORT ? Number(process.env.CLIENT_EXCEL_SERVICE_PORT) : undefined 
         },
       },
       {
-        name: 'AI_SERVICE',
+        name: 'CLIENT_AI_SERVICE',
         transport: Transport.TCP,
         options: { 
-          host: process.env.AI_SERVICE_HOST, 
-          port: process.env.AI_SERVICE_PORT ? Number(process.env.AI_SERVICE_PORT) : undefined 
+          host: process.env.CLIENT_AI_SERVICE_HOST, 
+          port: process.env.CLIENT_AI_SERVICE_PORT ? Number(process.env.CLIENT_AI_SERVICE_PORT) : undefined 
         },
       },
     ]),
