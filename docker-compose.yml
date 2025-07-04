@@ -46,7 +46,9 @@ services:
       - CLIENT_AI_SERVICE_HOST=${CLIENT_AI_SERVICE_HOST}
       - CLIENT_AI_SERVICE_PORT=${CLIENT_AI_SERVICE_PORT}   
       - CLIENT_EXCEL_SERVICE_HOST=${CLIENT_EXCEL_SERVICE_HOST}
-      - CLIENT_EXCEL_SERVICE_PORT=${CLIENT_EXCEL_SERVICE_PORT}         
+      - CLIENT_EXCEL_SERVICE_PORT=${CLIENT_EXCEL_SERVICE_PORT}  
+      - CLIENT_AUTH_SERVICE_HOST=${CLIENT_AUTH_SERVICE_HOST}
+      - CLIENT_AUTH_SERVICE_PORT=${CLIENT_AUTH_SERVICE_PORT}       
     depends_on:
       - ai-service
       - excel-service
@@ -66,6 +68,23 @@ services:
       - NODE_ENV=production
     depends_on:
       - gateway
+    networks:
+      - vibe-net
+
+  auth-service:
+    image: sshindetech/vibe-auth-service:latest
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    pull_policy: always
+    container_name: vibe-auth-service
+    restart: unless-stopped
+    ports:
+      - "${AUTH_SERVICE_PORT:-4003}:${AUTH_SERVICE_PORT:-4003}"
+    environment:
+      - NODE_ENV=production
+      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST:-auth-service}
+      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT:-4003}
     networks:
       - vibe-net
 
