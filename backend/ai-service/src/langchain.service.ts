@@ -57,6 +57,7 @@ export class LangChainService {
         });
 
         const model = new ChatGoogleGenerativeAI({ model: process.env.MODEL_ID!, apiKey: process.env.GOOGLE_API_KEY });
+        //@ts-ignore
         const response = await model.withStructuredOutput(
             responseSchema
         ).invoke(prompt);
