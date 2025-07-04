@@ -6,12 +6,15 @@
     "frontend",
     "backend/gateway",
     "backend/ai-service",
-    "backend/excel-service"
+    "backend/excel-service",
+    "backend/auth-service"
   ],
   "scripts": {
     "frontend": "npm run start --workspace frontend",
     "gateway": "npm run start --workspace backend/gateway",
     "gateway:dev": "npm run start:dev --workspace backend/gateway",
+    "auth-service": "npm run start --workspace backend/auth-service",
+    "auth-service:dev": "npm run start:dev --workspace backend/auth-service",
     "ai-service": "npm run start --workspace backend/ai-service",
     "ai-service:dev": "npm run start:dev --workspace backend/ai-service",
     "excel-service": "npm run start --workspace backend/excel-service",

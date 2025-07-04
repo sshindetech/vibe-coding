@@ -13,6 +13,7 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       IMAGE_NAME_GATEWAY: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-gateway
+      IMAGE_NAME_AUTH: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-auth-service
       IMAGE_NAME_AI: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-ai-service
       IMAGE_NAME_EXCEL: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-excel-service
       IMAGE_NAME_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/vibe-frontend
@@ -38,6 +39,14 @@ jobs:
           file: ./backend/gateway/Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME_GATEWAY }}:latest
+
+      - name: Build and push auth-service image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/auth-service
+          file: ./backend/auth-service/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_AUTH }}:latest
 
       - name: Build and push ai-service image
         uses: docker/build-push-action@v5

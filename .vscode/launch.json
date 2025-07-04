@@ -23,6 +23,23 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Debug Auth Microservice",
+      "program": "${workspaceFolder}/node_modules/.bin/nest",
+      "args": [
+        "start",
+        "--watch"
+      ],
+      "cwd": "${workspaceFolder}/backend/auth-service",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "envFile": "${workspaceFolder}/backend/auth-service/.env",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },    
+    // Microservice 1
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug Excel Microservice",
       "program": "${workspaceFolder}/node_modules/.bin/nest",
       "args": [

@@ -16,6 +16,7 @@ async function bootstrap() {
     .setTitle('Financial Data Q&A API')
     .setDescription('API for uploading Excel files and querying financial data')
     .setVersion('1.0')
+    .addBearerAuth() // Add Bearer token authentication
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
