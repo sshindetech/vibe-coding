@@ -3,7 +3,7 @@ import { Inject, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { Request } from 'express';
-import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -73,6 +73,7 @@ export class AuthController {
   @Get('profile')
   @ApiOperation({ summary: 'Get profile of logged in user' })
   @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({ status: 200, description: 'User profile returned' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Req() req: Request) {

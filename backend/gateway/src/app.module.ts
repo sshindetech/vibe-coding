@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
+import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     ClientsModule.register([
@@ -32,6 +32,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
   ],
+  providers: [JwtStrategy],
   controllers: [AppController, AuthController],
 })
 export class AppModule {}

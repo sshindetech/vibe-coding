@@ -1,7 +1,6 @@
 import { Controller, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthServiceService } from './auth-service.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AuthServiceController {
@@ -23,7 +22,6 @@ export class AuthServiceController {
   }
   
   @MessagePattern('auth_profile')
-  // @UseGuards(AuthGuard('jwt'))
   async getProfile(data: { accessToken: string }) {
     // req.user is set by JwtStrategy
     if (!data.accessToken) throw new UnauthorizedException('Invalid or expired token');
