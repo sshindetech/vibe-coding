@@ -40,21 +40,25 @@ export class LangChainService {
         
         // const prompt = `User query: ${query}\nReply ONLY in the following JSON format:\n{\n  "summary": "<short summary string>",\n  "chartData": {\n    "type": "bar|line|pie|etc",\n    "labels": [<string>],\n    "datasets": [\n      {\n        "label": "<dataset label>",\n        "data": [<number>]\n      }\n    ]\n  }\n}`;
         
+        const datasetSchema = z.object({
+            label: z.string(),
+            data: z.array(z.number()),
+        });
+
+        const chartDataSchema = z.object({
+            type: z.string(),
+            labels: z.array(z.string()),
+            datasets: z.array(datasetSchema),
+        });
+
+        const responseSchema = z.object({
+            summary: z.string(),
+            chartData: chartDataSchema,
+        });
+
         const model = new ChatGoogleGenerativeAI({ model: process.env.MODEL_ID!, apiKey: process.env.GOOGLE_API_KEY });
         const response = await model.withStructuredOutput(
-            z.object({
-                summary: z.string(),
-                chartData: z.object({
-                    type: z.string(),
-                    labels: z.array(z.string()),
-                    datasets: z.array(
-                        z.object({
-                            label: z.string(),
-                            data: z.array(z.number()),
-                        })
-                    ),
-                }),
-            })
+            responseSchema
         ).invoke(prompt);
         let summary = '', chartData = null;
         try {
